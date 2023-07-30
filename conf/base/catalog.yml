@@ -1,0 +1,21 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://docs.kedro.org/en/stable/data/data_catalog.html
+train_data:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/train.csv
+
+test_data:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/test.csv
+
+# 複数テーブルを結合する場合などは、それぞれの前処理結果を02_intermediateに吐き出し、
+# 結合したものを03_primaryに吐き出すような運用にするが、今回はデータソースとしてcvsファイル1個なので、前処理したら、03_primaryとしてしまう
+preprocessed_train_data:
+  type: pandas.ParquetDataSet
+  filepath: data/03_primary/preprocessed_train_data.pq
+
+preprocessed_test_data:
+  type: pandas.ParquetDataSet
+  filepath: data/03_primary/preprocessed_test_data.pq

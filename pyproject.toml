@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "scuc23"
+version = "0.1.0"
+description = "scuc23"
+authors = [
+	"AOYAMA hiroyuki <3ign0n@gmail.com>"
+]
+
+[tool.kedro]
+package_name = "scuc23"
+project_name = "scuc23"
+kedro_init_version = "0.18.11"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+black = ">=22.0,<23.0"
+flake8 = ">=3.7.9,<5.0"
+ipython = {version = ">=8.10,<9.0", markers = "python_version >= \"3.8\""}
+isort = ">=5.0,<6.0"
+jupyter = ">=1.0,<2.0"
+jupyterlab-server = ">=2.11.1,<2.16.0"
+jupyterlab = ">=3.0,<3.6.0"
+kedro-telemetry = ">=0.2.0,<0.3.0"
+nbstripout = ">=0.4,<1.0"
+pytest-cov = ">=3.0,<4.0"
+pytest-mock = ">=1.7.1,<2.0"
+pytest = ">=7.2,<8.0"
+pandas = "^2.0.3"
+kedro-datasets = {version = ">=1.0,<2.0", extras = ["pandas-csvdataset", "pandas-parquetdataset"]}
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = """
+--cov-report term-missing \
+--cov src/scuc23 -ra"""
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
+exclude_lines = ["pragma: no cover", "raise NotImplementedError"]
