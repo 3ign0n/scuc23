@@ -19,3 +19,15 @@ preprocessed_train_data:
 preprocessed_test_data:
   type: pandas.ParquetDataSet
   filepath: data/03_primary/preprocessed_test_data.pq
+
+regressor:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/regressor.pickle
+  versioned: true
+
+y_pred:
+  type: pandas.CSVDataSet
+  filepath: data/07_model_output/y_pred.csv
+  versioned: true
+  save_args:
+    index: False
