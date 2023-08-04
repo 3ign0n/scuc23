@@ -4,11 +4,17 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import preprocess_train_data, preprocess_test_data
+from .nodes import enable_autologging, preprocess_train_data, preprocess_test_data
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
+            node(
+                func=enable_autologging,
+                inputs="parameters",
+                outputs=None,
+                name="enable_autologging_node",
+            ),
             node(
                 func=preprocess_train_data,
                 inputs="train_data",

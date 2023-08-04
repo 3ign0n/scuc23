@@ -10,6 +10,8 @@ import scuc23.modules.lgbm_util as lgbm_util
 from sklearn.metrics import r2_score
 import logging
 
+import mlflow
+
 def create_train_test_data(train_data: pd.DataFrame, parameters: Dict) -> Tuple:
     """
     学習用データを分割する
@@ -71,3 +73,8 @@ def predict(regressor, test_data: pd.DataFrame, parameters: Dict) -> pd.DataFram
     """
     y_pred = regressor.predict(test_data)
     return pd.DataFrame(y_pred)
+
+
+def post_process(data: pd.DataFrame):
+    _  = mlflow.last_active_run()
+

@@ -4,7 +4,7 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import create_train_test_data, train_model, evaluate_model, predict
+from .nodes import create_train_test_data, train_model, evaluate_model, predict, post_process
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -34,5 +34,11 @@ def create_pipeline(**kwargs) -> Pipeline:
                 outputs="y_pred",
                 name="predict_node",
             ),
+            node(
+                func=post_process,
+                inputs="parameters",
+                outputs=None,
+                name="post_process",
+            )
         ]
     )

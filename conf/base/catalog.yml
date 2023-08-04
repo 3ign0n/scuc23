@@ -13,17 +13,23 @@ test_data:
 # 複数テーブルを結合する場合などは、それぞれの前処理結果を02_intermediateに吐き出し、
 # 結合したものを03_primaryに吐き出すような運用にするが、今回はデータソースとしてcvsファイル1個なので、前処理したら、03_primaryとしてしまう
 preprocessed_train_data:
-  type: pandas.ParquetDataSet
-  filepath: data/03_primary/preprocessed_train_data.pq
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/03_primary/preprocessed_train_data.pkl
 
 preprocessed_test_data:
-  type: pandas.ParquetDataSet
-  filepath: data/03_primary/preprocessed_test_data.pq
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/03_primary/preprocessed_test_data.pkl
 
 regressor:
-  type: pickle.PickleDataSet
-  filepath: data/06_models/regressor.pickle
-  versioned: true
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/regressor.pickle
+    versioned: true
 
 y_pred:
   type: pandas.CSVDataSet
