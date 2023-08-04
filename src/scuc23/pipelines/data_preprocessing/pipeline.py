@@ -4,7 +4,7 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import enable_autologging, preprocess_train_data, preprocess_test_data
+from .nodes import enable_autologging, preprocess_train_data, preprocess_test_data, save_pandas_profiling
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -26,5 +26,11 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs="test_data",
                 outputs="preprocessed_test_data",
                 name="preprocess_test_data_node",
+            ),
+            node(
+                func=save_pandas_profiling,
+                inputs=["train_data", "test_data"],
+                outputs=None,
+                name="save_pandas_profiling_node",
             ),
     ])
