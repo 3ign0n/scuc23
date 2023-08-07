@@ -5,10 +5,14 @@
 train_data:
   type: pandas.CSVDataSet
   filepath: data/01_raw/train.csv
+  load_args:
+    usecols: [region, year, manufacturer, condition, cylinders, fuel, odometer, title_status, transmission, drive, size, type, paint_color, state, price]
 
 test_data:
   type: pandas.CSVDataSet
   filepath: data/01_raw/test.csv
+  load_args:
+    usecols: [region, year, manufacturer, condition, cylinders, fuel, odometer, title_status, transmission, drive, size, type, paint_color, state]
 
 # 複数テーブルを結合する場合などは、それぞれの前処理結果を02_intermediateに吐き出し、
 # 結合したものを03_primaryに吐き出すような運用にするが、今回はデータソースとしてcvsファイル1個なので、前処理したら、03_primaryとしてしまう
@@ -16,13 +20,25 @@ preprocessed_train_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/03_primary/preprocessed_train_data.pkl
+    filepath: data/02_intermediate/preprocessed_train_data.pkl
 
 preprocessed_test_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/03_primary/preprocessed_test_data.pkl
+    filepath: data/02_intermediate/preprocessed_test_data.pkl
+
+encoded_train_data:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/03_primary/encoded_train_data.pkl
+
+encoded_test_data:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/03_primary/encoded_test_data.pkl
 
 regressor:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
@@ -37,3 +53,5 @@ y_pred:
   versioned: true
   save_args:
     index: False
+    header: False
+

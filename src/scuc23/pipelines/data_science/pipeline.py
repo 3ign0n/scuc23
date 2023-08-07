@@ -12,7 +12,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=create_train_test_data,
-                inputs=["preprocessed_train_data", "parameters"],
+                inputs=["encoded_train_data", "parameters"],
                 outputs=["X_train", "X_test", "y_train", "y_test"],
                 name="create_train_test_data_node",
             ),
@@ -30,7 +30,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=predict,
-                inputs=["regressor", "preprocessed_test_data", "parameters"],
+                inputs=["regressor", "encoded_test_data", "parameters"],
                 outputs="y_pred",
                 name="predict_node",
             ),
