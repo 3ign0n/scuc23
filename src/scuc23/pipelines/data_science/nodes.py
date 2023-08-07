@@ -72,7 +72,9 @@ def predict(regressor, test_data: pd.DataFrame, parameters: Dict) -> pd.DataFram
         parameters: parameters/data_science.ymlのDictionary
     """
     y_pred = regressor.predict(test_data)
-    return pd.DataFrame(y_pred)
+    output_df = pd.DataFrame(y_pred)
+    output_df.insert(0, 'index', range(27532, 27532 + len(output_df)))
+    return output_df
 
 
 def post_process(data: pd.DataFrame):
