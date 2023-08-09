@@ -49,6 +49,9 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame,
         raise NotImplementedError(f"{parameters['model']} is not implemented yet")    
 
 
+import plotly.express as px
+import os
+from datetime import datetime
 def evaluate_model(regressor, X_test: pd.DataFrame, y_test: pd.Series, parameters: Dict):
     """Calculates and logs the coefficient of determination.
 
@@ -61,6 +64,17 @@ def evaluate_model(regressor, X_test: pd.DataFrame, y_test: pd.Series, parameter
     score = r2_score(y_test, y_pred)
     logger = logging.getLogger(__name__)
     logger.info("Model has a coefficient R^2 of %.3f on test data.", score)
+
+
+    # 予測と価格の値を散布図に
+    df = pd.DataFrame(y_test).rename(columns={'price': 'y_test'}).reset_index()
+    df['y_pred'] = pd.Series(y_pred)
+    fig = px.scatter(df, x='y_test', y='y_pred', title='y_test vs y_pred', trendline='ols', trendline_color_override='red')
+
+    OUTPUT_DIR_BASE="data/08_reporting/scatterplot_pred_vs_valid"
+    OUTPUT_DIR=os.path.join(OUTPUT_DIR_BASE, datetime.now().strftime("%Y-%m-%dT%H.%M.%S.%fZ"))
+    os.makedirs(OUTPUT_DIR)
+    fig.write_image(os.path.join(OUTPUT_DIR, "scatterplot_pred_vs_valid.png"))
 
 
 def predict(regressor, test_data: pd.DataFrame, parameters: Dict) -> pd.DataFrame:
