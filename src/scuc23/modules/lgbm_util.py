@@ -57,12 +57,12 @@ def train_lgbm(
         nfold=parameters["model_options"]["lgbm_params"]["num_folds"],
         stratified=parameters["model_options"]["lgbm_params"]["is_stratified"],
         shuffle=parameters["model_options"]["lgbm_params"]["is_shuffle"],
-        metrics=parameters["model_options"]["lgbm_params"]["metrics"],
         callbacks=[
             lgbm.early_stopping(stopping_rounds=parameters["model_options"]["lgbm_params"]["early_stopping_rounds"], verbose=True),
             lgbm.log_evaluation(parameters["model_options"]["lgbm_params"]["verbose_eval"]),
             extraction_cb,
         ]
     )
+    print(result)
 
     return extraction_cb

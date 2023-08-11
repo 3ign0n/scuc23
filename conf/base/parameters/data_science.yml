@@ -25,7 +25,7 @@ model_options:
   y_label: "price"
   lgbm_params:
     hyperparams:
-      objective: "regression"
+      objective: "mape"
       learning_rate: .1
       random_state: 42
     num_boost_round: 10000
@@ -34,6 +34,3 @@ model_options:
     num_folds: 5
     is_stratified: true
     is_shuffle: true
-    metrics: 'mape'
-fold_params:
-  n_folds: 5
