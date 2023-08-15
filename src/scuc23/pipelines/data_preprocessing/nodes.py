@@ -8,6 +8,15 @@ import pandas as pd
 import category_encoders as ce
 from datetime import datetime
 import os
+import random
+import numpy as np
+
+def set_random_state(parameters: Dict):
+    random_state = parameters['random_state']
+    os.environ['PYTHONHASHSEED'] = str(random_state)
+    random.seed(random_state)
+    np.random.seed(random_state)
+
 
 def enable_autologging(parameters: Dict):
     mlflow.set_tag("mlflow.runName", datetime.now().isoformat())
@@ -69,7 +78,7 @@ from pandas_profiling import ProfileReport
 def save_pandas_profiling(train_data: pd.DataFrame, test_data: pd.DataFrame):
     OUTPUT_DIR_BASE="data/08_reporting/pandas_profiling"
     OUTPUT_DIR=os.path.join(OUTPUT_DIR_BASE, datetime.now().strftime("%Y-%m-%dT%H.%M.%S.%fZ"))
-    os.makedirs(OUTPUT_DIR)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     profile = ProfileReport(train_data, title="Pandas Profiling Report(train data)")
     profile.to_file(os.path.join(OUTPUT_DIR, "train.html"))

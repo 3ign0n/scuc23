@@ -36,6 +36,7 @@ pyqt5 = "^5.15.9"
 pandas-profiling = "^3.6.6"
 plotly-express = "^0.4.1"
 kaleido = "0.2.1"
+xgboost = "^1.7.6"
 
 [tool.isort]
 profile = "black"

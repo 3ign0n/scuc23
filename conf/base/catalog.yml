@@ -14,8 +14,6 @@ test_data:
   load_args:
     usecols: [region, year, manufacturer, condition, cylinders, fuel, odometer, title_status, transmission, drive, size, type, paint_color, state]
 
-# 複数テーブルを結合する場合などは、それぞれの前処理結果を02_intermediateに吐き出し、
-# 結合したものを03_primaryに吐き出すような運用にするが、今回はデータソースとしてcvsファイル1個なので、前処理したら、03_primaryとしてしまう
 preprocessed_train_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
@@ -54,4 +52,3 @@ y_pred:
   save_args:
     index: False
     header: False
-

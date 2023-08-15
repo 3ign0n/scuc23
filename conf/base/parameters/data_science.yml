@@ -3,8 +3,7 @@
 #
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
-random_state: 42
-model: "lgbm"
+model: "xgb"
 model_options:
   test_size: 0.3
   features:
@@ -34,3 +33,11 @@ model_options:
     num_folds: 5
     is_stratified: true
     is_shuffle: true
+  xgb_params:
+    hyperparams:
+      objective: "reg:linear"
+      eval_metric: "mape"
+    num_boost_round: 10000
+    early_stopping_rounds: 100
+    verbose_eval: false
+    num_folds: 5

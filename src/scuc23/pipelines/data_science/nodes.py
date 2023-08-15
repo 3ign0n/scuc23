@@ -5,6 +5,7 @@ generated using Kedro 0.18.11
 from typing import Dict, Tuple, Any
 import pandas as pd
 import scuc23.modules.lgbm_util as lgbm_util
+import scuc23.modules.xgb_util as xgb_util
 
 from sklearn.metrics import r2_score
 import logging
@@ -39,6 +40,8 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: Dict) -> 
     """
     if parameters["model"] == "lgbm":
         return lgbm_util.train_lgbm(X_train, y_train, parameters)
+    elif parameters["model"] == "xgb":
+        return xgb_util.train_xgb(X_train, y_train, parameters)
     else:
         raise NotImplementedError(f"{parameters['model']} is not implemented yet")    
 
@@ -68,7 +71,7 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: Dict) -> 
 
     OUTPUT_DIR_BASE="data/08_reporting/scatterplot_pred_vs_valid"
     OUTPUT_DIR=os.path.join(OUTPUT_DIR_BASE, datetime.now().strftime("%Y-%m-%dT%H.%M.%S.%fZ"))
-    os.makedirs(OUTPUT_DIR)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
     fig.write_image(os.path.join(OUTPUT_DIR, "scatterplot_pred_vs_valid.png"))
     """
 
@@ -81,7 +84,10 @@ def predict(regressor, test_data: pd.DataFrame, parameters: Dict) -> pd.DataFram
         train_data: 学習用データ
         parameters: parameters/data_science.ymlのDictionary
     """
-    y_pred = regressor.boosters_proxy.predict(test_data)
+    if parameters["model"] == "lgbm":
+        y_pred = regressor.boosters_proxy.predict(test_data)
+    elif parameters["model"] == "xgb":
+        y_pred = regressor.predict(test_data)
     output_df = pd.DataFrame(y_pred).T.mean(axis=1).to_frame()
     output_df.insert(0, 'index', range(27532, 27532 + len(output_df)))
     return output_df

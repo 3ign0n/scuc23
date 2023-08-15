@@ -1,1 +1,1 @@
-__all__ = ["train_lgbm"]
+__all__ = ["train_lgbm", "train_xgb"]

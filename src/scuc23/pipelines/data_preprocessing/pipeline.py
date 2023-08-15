@@ -4,11 +4,17 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import enable_autologging, preprocess_train_data, preprocess_test_data, save_pandas_profiling, preprocess_do_label_encoding
+from .nodes import set_random_state, enable_autologging, preprocess_train_data, preprocess_test_data, save_pandas_profiling, preprocess_do_label_encoding
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
+            node(
+                func=set_random_state,
+                inputs="parameters",
+                outputs=None,
+                name="set_random_state_node",
+            ),
             node(
                 func=enable_autologging,
                 inputs="parameters",
