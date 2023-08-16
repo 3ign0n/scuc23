@@ -26,7 +26,7 @@ def enable_autologging(parameters: Dict):
 def __preprocess_column_region_state(data: pd.DataFrame, region_state_data: pd.DataFrame) -> pd.DataFrame:
     tmp_df = pd.merge(data, region_state_data, on='region', how='left')
     tmp_df['state']=tmp_df['state_x'].fillna(tmp_df['state_y'])
-    tmp_df = tmp_df.drop(columns=['region', 'state_x', 'state_y'])
+    tmp_df = tmp_df.drop(columns=['state_x', 'state_y'])
     return tmp_df
 
 def __preprocess_column_year(data: pd.DataFrame) -> pd.DataFrame:
@@ -94,7 +94,7 @@ def save_pandas_profiling(train_data: pd.DataFrame, test_data: pd.DataFrame):
 
 
 def preprocess_do_label_encoding(data: pd.DataFrame) -> pd.DataFrame:
-    categorical_column_list = ["manufacturer","condition","cylinders","fuel","title_status","transmission","drive","size","type","paint_color","state"]
+    categorical_column_list = ["region","manufacturer","condition","cylinders","fuel","title_status","transmission","drive","size","type","paint_color","state"]
 
     ce_oe = ce.OrdinalEncoder(cols=categorical_column_list, handle_unknown='impute')
     enc_data = ce_oe.fit_transform(data)

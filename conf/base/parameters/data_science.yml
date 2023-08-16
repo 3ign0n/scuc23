@@ -7,6 +7,7 @@ model: "lgbm"
 model_options:
   test_size: 0.3
   features:
+    - region
     - year
     - manufacturer
     - condition
