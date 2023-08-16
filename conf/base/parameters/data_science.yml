@@ -3,11 +3,10 @@
 #
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
-model: "xgb"
+model: "lgbm"
 model_options:
   test_size: 0.3
   features:
-    - region
     - year
     - manufacturer
     - condition
