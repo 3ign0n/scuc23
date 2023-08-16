@@ -4,7 +4,7 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import create_train_data, train_model, predict, post_process
+from .nodes import create_train_data, train_model, plot_feature_importance, predict, post_process
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
@@ -20,6 +20,12 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["X_train", "y_train", "parameters"],
                 outputs="regressor",
                 name="train_model_node",
+            ),
+            node(
+                func=plot_feature_importance,
+                inputs=["regressor", "parameters"],
+                outputs=None,
+                name="plot_feature_importance_node",
             ),
             node(
                 func=predict,

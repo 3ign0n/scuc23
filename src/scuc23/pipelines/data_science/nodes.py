@@ -69,12 +69,16 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: Dict) -> 
     df['y_pred'] = pd.Series(y_pred)
     fig = px.scatter(df, x='y_test', y='y_pred', title='y_test vs y_pred', trendline='ols', trendline_color_override='red')
 
-    OUTPUT_DIR_BASE="data/08_reporting/scatterplot_pred_vs_valid"
-    OUTPUT_DIR=os.path.join(OUTPUT_DIR_BASE, datetime.now().strftime("%Y-%m-%dT%H.%M.%S.%fZ"))
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    fig.write_image(os.path.join(OUTPUT_DIR, "scatterplot_pred_vs_valid.png"))
+    start_datetime=mlflow.active_run().data.tags['custom.startDateTime']
+    output_dir_base="data/08_reporting/scatterplot_pred_vs_valid"
+    output_dir=os.path.join(output_dir_base, start_datetime)
+    os.makedirs(output_dir, exist_ok=True)
+    fig.write_image(os.path.join(output_dir, "scatterplot_pred_vs_valid.png"))
     """
 
+def plot_feature_importance(regressor, parameters: Dict):
+    if parameters["model"] == "lgbm":
+        lgbm_util.save_lgbm_graph(regressor)
 
 def predict(regressor, test_data: pd.DataFrame, parameters: Dict) -> pd.DataFrame:
     """Calculates and logs the coefficient of determination.

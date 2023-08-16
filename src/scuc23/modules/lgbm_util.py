@@ -66,3 +66,29 @@ def train_lgbm(
     print(result)
 
     return extraction_cb
+
+import os
+from datetime import datetime
+import mlflow
+import matplotlib.pyplot as plt
+def save_lgbm_graph(regressor):
+    start_datetime=mlflow.active_run().data.tags['custom.startDateTime']
+    output_dir_base="data/08_reporting/feature_importance"
+    output_dir=os.path.join(output_dir_base, start_datetime)
+    os.makedirs(output_dir, exist_ok=True)
+
+    for i, booster in enumerate(regressor.raw_boosters):
+        lgbm.plot_importance(booster,height=0.5,figsize=(8,16))
+        plt.savefig(os.path.join(output_dir, f"importance_{i}.png"))
+    plt.close()
+
+    output_dir_base="data/08_reporting/decision_tree"
+    output_dir=os.path.join(output_dir_base, start_datetime)
+    os.makedirs(output_dir, exist_ok=True)
+
+    # https://stackoverflow.com/questions/61894279/writing-create-tree-digraph-plot-to-a-png-file-in-python
+    for i, booster in enumerate(regressor.raw_boosters):
+        viz=lgbm.create_tree_digraph(booster)
+        viz.render(format='png', filename=os.path.join(output_dir, f"tree_digraph_{i}.dot"))
+        #graph = pydotplus.graph_from_dot_data(viz.source)
+        #graph.write_png(os.path.join(output_dir, f"tree_digraph_{i}.png"))
