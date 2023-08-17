@@ -15,7 +15,7 @@ project_name = "scuc23"
 kedro_init_version = "0.18.11"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.10"
+python = ">=3.10,<3.11"
 black = ">=22.0,<23.0"
 flake8 = ">=3.7.9,<5.0"
 ipython = {version = ">=8.10,<9.0", markers = "python_version >= \"3.8\""}
