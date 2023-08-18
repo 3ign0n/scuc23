@@ -58,12 +58,22 @@ def __preprocess_column_size(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
+def __preprocess_column_age_of_car(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    製造年からの経過年に直す
+    """
+    this_year=int(datetime.now().strftime("%Y"))
+    data['age_of_car'] = this_year - data['year']
+    return data.drop(columns=['year'])
+
+
 def __apply_preprocessing_rules(data: pd.DataFrame, region_state_data: pd.DataFrame) -> pd.DataFrame:
     tmp_df = __preprocess_column_region_state(data, region_state_data)
     tmp_df = __preprocess_column_year(tmp_df)
     tmp_df = __preprocess_column_manufacturer(tmp_df)
     tmp_df = __preprocess_column_odometer(tmp_df)
-    return __preprocess_column_size(tmp_df)
+    tmp_df = __preprocess_column_size(tmp_df)
+    return __preprocess_column_age_of_car(tmp_df)
 
 
 def preprocess_train_data(train_data: pd.DataFrame, region_state_data: pd.DataFrame) -> pd.DataFrame:
