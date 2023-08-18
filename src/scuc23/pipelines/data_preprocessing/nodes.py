@@ -62,6 +62,9 @@ def __preprocess_column_manufacturer(data: pd.DataFrame) -> pd.DataFrame:
 def __preprocess_column_odometer(data: pd.DataFrame) -> pd.DataFrame:
     # オドメーターが負数というのはおかしいので、入力ミスと考え、正数に直す
     data.loc[data['odometer']<0, 'odometer'] = data['odometer'] * -1
+
+    # 10万キロ超えたら買い替え検討、20万キロ超えたらだいぶやばいと言われているのに走行距離50万キロ超えは明らかな入力ミスと考え、一桁減らす
+    data.loc[data['odometer']>500000, 'odometer'] = data['odometer'] / 10
     return data
 
 
