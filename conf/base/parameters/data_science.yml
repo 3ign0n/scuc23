@@ -31,7 +31,7 @@ model_options:
     early_stopping_rounds: 100
     verbose_eval: false
     num_folds: 5
-    is_stratified: true
+    is_stratified: false
     is_shuffle: true
   xgb_params:
     hyperparams:
