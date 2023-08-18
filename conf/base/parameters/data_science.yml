@@ -20,7 +20,6 @@ model_options:
     - size
     - type
     - paint_color
-    - state
   y_label: "price"
   lgbm_params:
     hyperparams:
