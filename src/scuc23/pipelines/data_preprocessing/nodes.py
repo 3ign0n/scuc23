@@ -41,8 +41,21 @@ def __preprocess_column_year(data: pd.DataFrame) -> pd.DataFrame:
     data.loc[data['year']>=2999, 'year'] = data['year'] - 1000
     return data
 
+
 def __preprocess_column_manufacturer(data: pd.DataFrame) -> pd.DataFrame:
+    data['manufacturer'] = data['manufacturer'].str.lower()
     data['manufacturer'] = data['manufacturer'].str.normalize('NFKC')
+    
+    # nissanにunicodeの変な文字が混じっていた
+    data['manufacturer'] = data['manufacturer'].str.replace(u"\u0455", 's')
+    # toyotaにunicodeの変な文字が混じっていた
+    data['manufacturer'] = data['manufacturer'].str.replace(u"\u0430", 'a')
+    # subaru, saturnにunicodeの変な文字が混じっていた
+    data['manufacturer'] = data['manufacturer'].str.replace(u"\u03b1", 'a')
+    # volkswagenにunicodeの変な文字が混じっていた
+    data['manufacturer'] = data['manufacturer'].str.replace(u"\u043e", 'o')
+    # chryslerにunicodeの変な文字が混じっていた
+    data['manufacturer'] = data['manufacturer'].str.replace(u"\u1d04", 'c')
     return data
 
 
