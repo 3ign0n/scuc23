@@ -66,6 +66,13 @@ def __preprocess_column_condition(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
+def __preprocess_column_cylinders(data: pd.DataFrame) -> pd.DataFrame:
+    # 数値化する
+    # otherという文字列もあるが、NaN扱いとなる
+    data['cylinders'] = data['cylinders'].str.extract(r'(\d+)').astype(float)
+    return data
+
+
 def __preprocess_column_odometer(data: pd.DataFrame) -> pd.DataFrame:
     # オドメーターが負数というのはおかしいので、入力ミスと考え、正数に直す
     data.loc[data['odometer']<0, 'odometer'] = data['odometer'] * -1
@@ -86,6 +93,7 @@ def __apply_preprocessing_rules(data: pd.DataFrame, region_state_data: pd.DataFr
     tmp_df = __preprocess_column_year(tmp_df)
     tmp_df = __preprocess_column_manufacturer(tmp_df)
     tmp_df = __preprocess_column_condition(tmp_df)
+    tmp_df = __preprocess_column_cylinders(tmp_df)
     tmp_df = __preprocess_column_odometer(tmp_df)
     return __preprocess_column_size(tmp_df)
 
