@@ -82,16 +82,6 @@ def __preprocess_column_odometer(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def __preprocess_applying_logalithm(data: pd.DataFrame) -> pd.DataFrame:
-    if 'price' in data:
-        data['price_log']=np.log10(data['price'])
-        data = data.drop(columns=['price'])
-        data = data.rename(columns={'price_log': 'price'})
-    data['odometer_log']=np.log10(data['odometer'])
-    data = data.drop(columns=['odometer'])
-    return data.rename(columns={'odometer_log': 'odometer'})
-
-
 def __preprocess_column_size(data: pd.DataFrame) -> pd.DataFrame:
     data['size'] = data['size'].str.replace('ー', '-')
     data['size'] = data['size'].str.replace('−', '-')    
@@ -105,7 +95,6 @@ def __apply_preprocessing_rules(data: pd.DataFrame, region_state_data: pd.DataFr
     tmp_df = __preprocess_column_condition(tmp_df)
     tmp_df = __preprocess_column_cylinders(tmp_df)
     tmp_df = __preprocess_column_odometer(tmp_df)
-    tmp_df = __preprocess_applying_logalithm(tmp_df)
     return __preprocess_column_size(tmp_df)
 
 
