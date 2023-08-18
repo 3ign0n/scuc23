@@ -8,7 +8,7 @@ model_options:
   test_size: 0.3
   features:
     - region
-    - age_of_car
+    - year
     - manufacturer
     - condition
     - cylinders
