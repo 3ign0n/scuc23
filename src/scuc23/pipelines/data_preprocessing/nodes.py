@@ -59,6 +59,13 @@ def __preprocess_column_manufacturer(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
+def __preprocess_column_condition(data: pd.DataFrame) -> pd.DataFrame:
+    # newとlike newがあるが、like newに寄せる。
+    # newのodometerやyearの値見た感じ、新車ってことはありえないので
+    data.loc[data['condition']=='new', 'condition'] = 'like new'
+    return data
+
+
 def __preprocess_column_odometer(data: pd.DataFrame) -> pd.DataFrame:
     # オドメーターが負数というのはおかしいので、入力ミスと考え、正数に直す
     data.loc[data['odometer']<0, 'odometer'] = data['odometer'] * -1
@@ -78,6 +85,7 @@ def __apply_preprocessing_rules(data: pd.DataFrame, region_state_data: pd.DataFr
     tmp_df = __preprocess_column_region_state(data, region_state_data)
     tmp_df = __preprocess_column_year(tmp_df)
     tmp_df = __preprocess_column_manufacturer(tmp_df)
+    tmp_df = __preprocess_column_condition(tmp_df)
     tmp_df = __preprocess_column_odometer(tmp_df)
     return __preprocess_column_size(tmp_df)
 
