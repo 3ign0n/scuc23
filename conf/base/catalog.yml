@@ -2,13 +2,13 @@
 #
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://docs.kedro.org/en/stable/data/data_catalog.html
-train_data:
+raw_train_data:
   type: pandas.CSVDataSet
   filepath: data/01_raw/train.csv
   load_args:
     usecols: [region, year, manufacturer, condition, cylinders, fuel, odometer, title_status, transmission, drive, size, type, paint_color, state, price]
 
-test_data:
+raw_test_data:
   type: pandas.CSVDataSet
   filepath: data/01_raw/test.csv
   load_args:
@@ -30,13 +30,25 @@ encoded_train_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/03_primary/encoded_train_data.pkl
+    filepath: data/02_intermediate/encoded_train_data.pkl
 
-encoded_test_data:
+train_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/03_primary/encoded_test_data.pkl
+    filepath: data/03_primary/train_data.pkl
+
+valid_data:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/03_primary/valid_data.pkl
+
+test_data:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/03_primary/test_data.pkl
 
 regressor:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet

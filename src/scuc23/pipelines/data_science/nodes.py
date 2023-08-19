@@ -12,7 +12,7 @@ import logging
 
 import mlflow
 
-def create_train_data(train_data: pd.DataFrame, parameters: Dict) -> Tuple:
+def create_modelinput_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
     """
     学習用データを説明変数と目的変数に分割する
 
@@ -23,9 +23,9 @@ def create_train_data(train_data: pd.DataFrame, parameters: Dict) -> Tuple:
         学習用data.
     """
     opts = parameters["model_options"]
-    X_train = train_data[opts["features"]]
-    y_train = train_data[opts["y_label"]]
-    return X_train, y_train
+    X = data[opts["features"]]
+    y = data[opts["y_label"]]
+    return X, y
 
 def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: Dict) -> Any:
     """
@@ -46,35 +46,35 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: Dict) -> 
         raise NotImplementedError(f"{parameters['model']} is not implemented yet")    
 
 
-#import plotly.express as px
-#import os
-#from datetime import datetime
-#def evaluate_model(regressor, X_test: pd.DataFrame, y_test: pd.Series, parameters: Dict):
+import plotly.express as px
+import os
+from datetime import datetime
+def evaluate_model(regressor, X_valid: pd.DataFrame, y_valid: pd.Series, parameters: Dict):
     """Calculates and logs the coefficient of determination.
 
     Args:
         regressor: モデル
-        X_test: 評価データ.
-        y_test: 評価結果（price）.
+        X_valid: 評価データ.
+        y_valid: 評価結果（price）.
     """
-    """
-    y_pred = regressor.predict(X_test)
-    score = r2_score(y_test, y_pred)
+    y_pred_folds = regressor.boosters_proxy.predict(X_valid)
+    y_pred = pd.DataFrame(y_pred_folds).T.mean(axis=1)
+    score = r2_score(y_valid, y_pred)
     logger = logging.getLogger(__name__)
     logger.info("Model has a coefficient R^2 of %.3f on test data.", score)
 
 
     # 予測と価格の値を散布図に
-    df = pd.DataFrame(y_test).rename(columns={'price': 'y_test'}).reset_index()
+    df = pd.DataFrame(y_valid).rename(columns={'price': 'y_valid'}).reset_index()
     df['y_pred'] = pd.Series(y_pred)
-    fig = px.scatter(df, x='y_test', y='y_pred', title='y_test vs y_pred', trendline='ols', trendline_color_override='red')
+    fig = px.scatter(df, x='y_valid', y='y_pred', title='y_valid vs y_pred', trendline='ols', trendline_color_override='red')
 
     start_datetime=mlflow.active_run().data.tags['custom.startDateTime']
     output_dir_base="data/08_reporting/scatterplot_pred_vs_valid"
     output_dir=os.path.join(output_dir_base, start_datetime)
     os.makedirs(output_dir, exist_ok=True)
     fig.write_image(os.path.join(output_dir, "scatterplot_pred_vs_valid.png"))
-    """
+
 
 def plot_feature_importance(regressor, parameters: Dict):
     if parameters["model"] == "lgbm":

@@ -3,13 +3,14 @@ This is a boilerplate pipeline 'data_preprocessing'
 generated using Kedro 0.18.11
 """
 import mlflow
-from typing import Dict
+from typing import Dict, Tuple
 import pandas as pd
 import category_encoders as ce
 from datetime import datetime, timedelta, timezone
 import os
 import random
 import numpy as np
+from sklearn.model_selection import train_test_split
 
 def set_random_state(parameters: Dict):
     random_state = parameters['random_state']
@@ -99,26 +100,15 @@ def __apply_preprocessing_rules(data: pd.DataFrame) -> pd.DataFrame:
     return __preprocess_column_state(tmp_df)
 
 
-def preprocess_train_data(train_data: pd.DataFrame) -> pd.DataFrame:
-    """Preprocesses the data for train_data.
+def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
+    """Preprocesses the data.
 
     Args:
-        train_data: Raw data.
+        data: Raw data.
     Returns:
         Preprocessed data
     """
-    return __apply_preprocessing_rules(train_data)
-
-
-def preprocess_test_data(test_data: pd.DataFrame) -> pd.DataFrame:
-    """Preprocesses the data for train_data.
-
-    Args:
-        test_data: Raw data.
-    Returns:
-        Preprocessed data
-    """
-    return __apply_preprocessing_rules(test_data)
+    return __apply_preprocessing_rules(data)
 
 
 import mlflow
@@ -147,3 +137,7 @@ def preprocess_do_label_encoding(data: pd.DataFrame) -> pd.DataFrame:
     
     return enc_data
 
+
+def split_train_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
+    X_train, X_valid = train_test_split(data, test_size=0.2, random_state=parameters['random_state'])
+    return X_train, X_valid
