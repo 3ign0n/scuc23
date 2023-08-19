@@ -62,6 +62,7 @@ eval_results:
   data_set:
     type: pickle.PickleDataSet
     filepath: data/07_model_output/eval_results.pkl
+    versioned: true
 
 y_pred:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
