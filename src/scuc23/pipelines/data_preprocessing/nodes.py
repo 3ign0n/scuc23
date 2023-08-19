@@ -125,18 +125,21 @@ def save_pandas_profiling(train_data: pd.DataFrame, test_data: pd.DataFrame):
     profile.to_file(os.path.join(output_dir, "test.html"))
 
 
-def preprocess_do_label_encoding(data: pd.DataFrame) -> pd.DataFrame:
-    categorical_column_list = ["region","manufacturer","condition","fuel","title_status","transmission","drive","size","type","paint_color"]
+def preprocess_do_dummy_encoding(data: pd.DataFrame, parameters: Dict) -> pd.DataFrame:
+    opts = parameters['valid_params']
+    valid_columns = opts['features']
+    if opts['y_label'] in data:
+        valid_columns.append(opts['y_label'])
+    valid_data = data[valid_columns]
+    df_enc = pd.get_dummies(valid_data, drop_first=True, dummy_na=True)
 
-    ce_oe = ce.OrdinalEncoder(cols=categorical_column_list, handle_unknown='impute')
-    enc_data = ce_oe.fit_transform(data)
+    # lightgbm.basic.LightGBMError: Do not support special JSON characters in feature name.
+    # というエラーが出た。
+    # https://github.com/microsoft/LightGBM/blob/c60bc739b0a8163e134c3df721b089020f838726/include/LightGBM/utils/common.h#L890-L896
+    # ↑の中だと、カンマがNGのようなのでリネームする
+    df_enc = df_enc.rename(columns=lambda s: s.replace(',', ' '))
 
-    # 値を1の始まりから0の始まりにする
-    for column_name in categorical_column_list:
-        enc_data[column_name] = enc_data[column_name] - 1
-    
-    return enc_data
-
+    return df_enc
 
 def split_train_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
     X_train, X_valid = train_test_split(data, test_size=0.2, random_state=parameters['random_state'])

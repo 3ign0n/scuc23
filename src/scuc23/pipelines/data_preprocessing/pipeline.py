@@ -4,7 +4,7 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import set_random_state, enable_autologging, preprocess_data, save_pandas_profiling, preprocess_do_label_encoding, split_train_data
+from .nodes import set_random_state, enable_autologging, preprocess_data, save_pandas_profiling, preprocess_do_dummy_encoding, split_train_data
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -40,16 +40,16 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="save_pandas_profiling_node",
             ),
             node(
-                func=preprocess_do_label_encoding,
-                inputs="preprocessed_train_data",
+                func=preprocess_do_dummy_encoding,
+                inputs=["preprocessed_train_data", "parameters"],
                 outputs="encoded_train_data",
-                name="preprocess_train_data_label_encoding_node",
+                name="preprocess_train_dummy_encoding_node",
             ),
             node(
-                func=preprocess_do_label_encoding,
-                inputs="preprocessed_test_data",
+                func=preprocess_do_dummy_encoding,
+                inputs=["preprocessed_test_data", "parameters"],
                 outputs="test_data",
-                name="preprocess_test_data_label_encoding_node",
+                name="preprocess_test_dummy_encoding_node",
             ),
             node(
                 func=split_train_data,

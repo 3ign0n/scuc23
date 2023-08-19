@@ -1,1 +1,17 @@
 random_state: 42
+valid_params:
+  features:
+    - region
+    - year
+    - manufacturer
+    - condition
+    - cylinders
+    - fuel
+    - odometer
+    - title_status
+    - transmission
+    - drive
+    - size
+    - type
+    - paint_color
+  y_label: "price"

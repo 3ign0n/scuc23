@@ -22,9 +22,9 @@ def create_modelinput_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
     Returns:
         学習用data.
     """
-    opts = parameters["model_options"]
-    X = data[opts["features"]]
+    opts = parameters["valid_params"]
     y = data[opts["y_label"]]
+    X = data.drop(columns=[opts["y_label"]])
     return X, y
 
 def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: Dict) -> (Any, Dict):

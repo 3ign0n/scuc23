@@ -6,21 +6,6 @@
 model: "lgbm"
 model_options:
   test_size: 0.3
-  features:
-    - region
-    - year
-    - manufacturer
-    - condition
-    - cylinders
-    - fuel
-    - odometer
-    - title_status
-    - transmission
-    - drive
-    - size
-    - type
-    - paint_color
-  y_label: "price"
   lgbm_params:
     hyperparams:
       objective: "mape"
