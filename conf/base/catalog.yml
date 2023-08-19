@@ -57,10 +57,18 @@ regressor:
     filepath: data/06_models/regressor.pickle
     versioned: true
 
+eval_results:
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pickle.PickleDataSet
+    filepath: data/07_model_output/eval_results.pkl
+
 y_pred:
-  type: pandas.CSVDataSet
-  filepath: data/07_model_output/y_pred.csv
-  versioned: true
-  save_args:
-    index: False
-    header: False
+  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
+  data_set:
+    type: pandas.CSVDataSet
+    filepath: data/07_model_output/y_pred.csv
+    versioned: true
+    save_args:
+      index: False
+      header: False

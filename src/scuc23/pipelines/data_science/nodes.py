@@ -27,7 +27,7 @@ def create_modelinput_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
     y = data[opts["y_label"]]
     return X, y
 
-def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: Dict) -> Any:
+def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: Dict) -> (Any, Dict):
     """
     モデルを学習させる
 
@@ -79,6 +79,12 @@ def evaluate_model(regressor, X_valid: pd.DataFrame, y_valid: pd.Series, paramet
 def plot_feature_importance(regressor, parameters: Dict):
     if parameters["model"] == "lgbm":
         lgbm_util.save_lgbm_graph(regressor)
+
+
+def plot_learning_curve(eval_results: Dict, parameters: Dict):
+    if parameters["model"] == "lgbm":
+        lgbm_util.save_lgbm_learning_curve(eval_results)
+
 
 def predict(regressor, test_data: pd.DataFrame, parameters: Dict) -> pd.DataFrame:
     """Calculates and logs the coefficient of determination.

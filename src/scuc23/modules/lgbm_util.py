@@ -1,7 +1,8 @@
 from typing import Dict, Any
 import lightgbm as lgbm
 import pandas as pd
-
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 
 class ModelExtractionCallback(object):
     """Callback class for retrieving trained model from lightgbm.cv()
@@ -44,7 +45,7 @@ def train_lgbm(
         X_train: pd.DataFrame,
         y_train: pd.Series,
         parameters: Dict
-        ) -> Any:
+        ) -> (Any, Dict):
 
     train_data = lgbm.Dataset(X_train, label=y_train)
 
@@ -63,9 +64,9 @@ def train_lgbm(
             extraction_cb,
         ]
     )
-    print(result)
+    #print(result)
 
-    return extraction_cb
+    return extraction_cb, result
 
 import os
 from datetime import datetime
@@ -92,3 +93,23 @@ def save_lgbm_graph(regressor):
         viz.render(format='png', filename=os.path.join(output_dir, f"tree_digraph_{i}.dot"))
         #graph = pydotplus.graph_from_dot_data(viz.source)
         #graph.write_png(os.path.join(output_dir, f"tree_digraph_{i}.png"))
+
+
+def save_lgbm_learning_curve(eval_results: Dict):
+    plot_df = pd.DataFrame({'iterations': [i for i, _ in enumerate(eval_results['valid mape-mean'], start=1)], 'performance(mape)': eval_results['valid mape-mean'], 'performance(mae)': eval_results['valid l1-mean']})
+
+    fig= make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(go.Scatter(x=plot_df["iterations"], y=plot_df["performance(mape)"], name="valid mape-mean", line=dict(color="blue")))
+    fig.add_trace(go.Scatter(x=plot_df["iterations"], y=plot_df["performance(mae)"], name="valid l1-mean", line=dict(color="purple")),secondary_y=True)
+    fig.update_layout(
+        title_text='performance', title_x=0.5
+    )
+    fig.update_xaxes(title_text='iterations')
+    fig.update_yaxes(title_text='mape', secondary_y=False)
+    fig.update_yaxes(title_text='mae', secondary_y=True)
+
+    start_datetime=mlflow.active_run().data.tags['custom.startDateTime']
+    output_dir_base="data/08_reporting/iteration_performance_mape"
+    output_dir=os.path.join(output_dir_base, start_datetime)
+    os.makedirs(output_dir, exist_ok=True)
+    fig.write_image(os.path.join(output_dir, "iteration_performance_mape.png"))

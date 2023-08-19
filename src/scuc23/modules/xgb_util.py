@@ -70,7 +70,7 @@ def train_xgb(
         X_train: pd.DataFrame,
         y_train: pd.Series,
         parameters: Dict
-        ) -> Any:
+        ) -> (Any, Dict):
 
     train_data = xgb.DMatrix(X_train, label=y_train)
 
@@ -94,6 +94,6 @@ def train_xgb(
             extraction_cb,
         ]
     )
-    print(result)
+    #print(result)
 
-    return XgbBestModel(extraction_cb.boosters_proxy)
+    return XgbBestModel(extraction_cb.boosters_proxy), result

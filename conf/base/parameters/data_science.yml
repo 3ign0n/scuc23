@@ -25,12 +25,13 @@ model_options:
     hyperparams:
       objective: "mape"
       learning_rate: .1
+      metrics: ['mape', 'mae']
       random_state: 42
     num_boost_round: 10000
     early_stopping_rounds: 100
     verbose_eval: false
     num_folds: 5
-    is_stratified: true
+    is_stratified: false
     is_shuffle: true
   xgb_params:
     hyperparams:

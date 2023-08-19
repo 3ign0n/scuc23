@@ -4,7 +4,7 @@ generated using Kedro 0.18.11
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import create_modelinput_data, train_model, plot_feature_importance, evaluate_model, predict, post_process
+from .nodes import create_modelinput_data, train_model, plot_feature_importance, plot_learning_curve, evaluate_model, predict, post_process
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline(
@@ -18,7 +18,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=train_model,
                 inputs=["X_train", "y_train", "parameters"],
-                outputs="regressor",
+                outputs=["regressor", "eval_results"],
                 name="train_model_node",
             ),
             node(
@@ -26,6 +26,12 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["regressor", "parameters"],
                 outputs=None,
                 name="plot_feature_importance_node",
+            ),
+            node(
+                func=plot_learning_curve,
+                inputs=["eval_results", "parameters"],
+                outputs=None,
+                name="plot_learning_curve_node",
             ),
             node(
                 func=create_modelinput_data,
