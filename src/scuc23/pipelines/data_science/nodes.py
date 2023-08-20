@@ -4,7 +4,6 @@ generated using Kedro 0.18.11
 """
 from typing import Dict, Tuple, Any
 import pandas as pd
-import numpy as np
 import scuc23.modules.lgbm_util as lgbm_util
 import scuc23.modules.xgb_util as xgb_util
 
@@ -100,7 +99,6 @@ def predict(regressor, test_data: pd.DataFrame, parameters: Dict) -> pd.DataFram
     elif parameters["model"] == "xgb":
         y_pred = regressor.predict(test_data)
     output_df = pd.DataFrame(y_pred).T.mean(axis=1).to_frame()
-    output_df[0]=np.power(10, output_df[0])
     output_df.insert(0, 'index', range(27532, 27532 + len(output_df)))
     return output_df
 
