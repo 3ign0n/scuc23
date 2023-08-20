@@ -1,7 +1,7 @@
 random_state: 42
 valid_params:
   features:
-    - state
+    - region
     - year
     - manufacturer
     - condition

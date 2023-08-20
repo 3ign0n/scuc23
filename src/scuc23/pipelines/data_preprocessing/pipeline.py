@@ -23,13 +23,13 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=preprocess_data,
-                inputs=["raw_train_data", "region_state_data"],
+                inputs=["raw_train_data"],
                 outputs="preprocessed_train_data",
                 name="preprocess_train_data_node",
             ),
             node(
                 func=preprocess_data,
-                inputs=["raw_test_data", "region_state_data"],
+                inputs=["raw_test_data"],
                 outputs="preprocessed_test_data",
                 name="preprocess_test_data_node",
             ),

@@ -31,13 +31,6 @@ def enable_autologging(parameters: Dict):
     mlflow.autolog()
 
 
-def __preprocess_column_region_state(data: pd.DataFrame, region_state_data: pd.DataFrame) -> pd.DataFrame:
-    tmp_df = pd.merge(data, region_state_data, on='region', how='left')
-    tmp_df['state']=tmp_df['state_x'].fillna(tmp_df['state_y'])
-    tmp_df = tmp_df.drop(columns=['state_x', 'state_y', 'region'])
-    return tmp_df
-
-
 def __preprocess_column_year(data: pd.DataFrame) -> pd.DataFrame:
     # 2999年以上の値はおかしいので、入力ミスと考え、-1000する
     data.loc[data['year']>=2999, 'year'] = data['year'] - 1000
@@ -112,18 +105,26 @@ def __preprocess_column_size(data: pd.DataFrame) -> pd.DataFrame:
     data['size'] = data['size'].astype(int)
     return data
 
-def __apply_preprocessing_rules(data: pd.DataFrame, region_state_data: pd.DataFrame) -> pd.DataFrame:
-    tmp_df = __preprocess_column_region_state(data, region_state_data)
-    tmp_df = __preprocess_column_year(tmp_df)
+
+def __preprocess_column_state(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    regionと深い関係があり、多重共線性を生むのでドロップ
+    """
+    return data.drop(columns=['state'])
+
+
+def __apply_preprocessing_rules(data: pd.DataFrame) -> pd.DataFrame:
+    tmp_df = __preprocess_column_year(data)
     tmp_df = __preprocess_column_manufacturer(tmp_df)
     tmp_df = __preprocess_column_condition(tmp_df)
     tmp_df = __preprocess_column_cylinders(tmp_df)
     tmp_df = __preprocess_column_odometer(tmp_df)
     tmp_df = __preprocess_column_drive(tmp_df)
-    return __preprocess_column_size(tmp_df)
+    tmp_df = __preprocess_column_size(tmp_df)
+    return __preprocess_column_state(tmp_df)
 
 
-def preprocess_data(data: pd.DataFrame, region_state_data: pd.DataFrame) -> pd.DataFrame:
+def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
     """Preprocesses the data.
 
     Args:
@@ -131,7 +132,7 @@ def preprocess_data(data: pd.DataFrame, region_state_data: pd.DataFrame) -> pd.D
     Returns:
         Preprocessed data
     """
-    return __apply_preprocessing_rules(data, region_state_data)
+    return __apply_preprocessing_rules(data)
 
 
 import mlflow

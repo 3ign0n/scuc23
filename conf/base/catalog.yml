@@ -14,10 +14,6 @@ raw_test_data:
   load_args:
     usecols: [region, year, manufacturer, condition, cylinders, fuel, odometer, title_status, transmission, drive, size, type, paint_color, state]
 
-region_state_data:
-  type: pandas.CSVDataSet
-  filepath: data/01_raw/region-state.csv
-
 preprocessed_train_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
