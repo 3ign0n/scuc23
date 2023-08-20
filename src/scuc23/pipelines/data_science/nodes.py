@@ -8,6 +8,7 @@ import scuc23.modules.lgbm_util as lgbm_util
 import scuc23.modules.xgb_util as xgb_util
 
 from sklearn.metrics import r2_score
+from sklearn.metrics import mean_absolute_percentage_error
 import logging
 
 import mlflow
@@ -60,8 +61,9 @@ def evaluate_model(regressor, X_valid: pd.DataFrame, y_valid: pd.Series, paramet
     y_pred_folds = regressor.boosters_proxy.predict(X_valid)
     y_pred = pd.DataFrame(y_pred_folds).T.mean(axis=1)
     score = r2_score(y_valid, y_pred)
+    mape = mean_absolute_percentage_error(y_valid, y_pred)
     logger = logging.getLogger(__name__)
-    logger.info("Model has a coefficient R^2 of %.3f on test data.", score)
+    logger.info("Model has a coefficient R^2:%.6f, mape:%.6f on test data.", score, mape)
 
 
     # 予測と価格の値を散布図に

@@ -47,6 +47,10 @@ def train_lgbm(
         parameters: Dict
         ) -> (Any, Dict):
 
+    # get_dummiesしたときは指定したらダメっぽい
+    # ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+    #category_columns=X_train.columns.drop(['year', 'odometer', 'cylinders'])
+
     train_data = lgbm.Dataset(X_train, label=y_train)
 
     extraction_cb = ModelExtractionCallback()
@@ -58,6 +62,7 @@ def train_lgbm(
         nfold=parameters["model_options"]["lgbm_params"]["num_folds"],
         stratified=parameters["model_options"]["lgbm_params"]["is_stratified"],
         shuffle=parameters["model_options"]["lgbm_params"]["is_shuffle"],
+        #categorical_feature=category_columns,
         callbacks=[
             lgbm.early_stopping(stopping_rounds=parameters["model_options"]["lgbm_params"]["early_stopping_rounds"], verbose=True),
             lgbm.log_evaluation(parameters["model_options"]["lgbm_params"]["verbose_eval"]),

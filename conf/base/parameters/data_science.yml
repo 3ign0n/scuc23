@@ -9,8 +9,12 @@ model_options:
   lgbm_params:
     hyperparams:
       objective: "mape"
-      learning_rate: .1
+      learning_rate: .01
       metrics: ['mape', 'mae']
+      num_leaves: 63
+      feature_fraction: 0.8
+      bagging_freq: 1
+      bagging_fraction: 0.8
       random_state: 42
     num_boost_round: 10000
     early_stopping_rounds: 100
