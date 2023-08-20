@@ -8,12 +8,17 @@ import pandas as pd
 import category_encoders as ce
 from datetime import datetime, timedelta, timezone
 import os
+import logging
 import random
 import numpy as np
 from sklearn.model_selection import train_test_split
 
 def set_random_state(parameters: Dict):
     random_state = parameters['random_state']
+    
+    logger = logging.getLogger(__name__)
+    logger.info(f"initializing random_state={random_state}")
+
     os.environ['PYTHONHASHSEED'] = str(random_state)
     random.seed(random_state)
     np.random.seed(random_state)
