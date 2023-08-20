@@ -96,20 +96,20 @@ def save_lgbm_graph(regressor):
 
 
 def save_lgbm_learning_curve(eval_results: Dict):
-    plot_df = pd.DataFrame({'iterations': [i for i, _ in enumerate(eval_results['valid mape-mean'], start=1)], 'performance(mape)': eval_results['valid mape-mean'], 'performance(mae)': eval_results['valid l1-mean']})
+    plot_df = pd.DataFrame({'iterations': [i for i, _ in enumerate(eval_results['valid fair-mean'], start=1)], 'performance(fair loss)': eval_results['valid fair-mean'], 'performance(mae)': eval_results['valid l1-mean']})
 
     fig= make_subplots(specs=[[{"secondary_y": True}]])
-    fig.add_trace(go.Scatter(x=plot_df["iterations"], y=plot_df["performance(mape)"], name="valid mape-mean", line=dict(color="blue")))
+    fig.add_trace(go.Scatter(x=plot_df["iterations"], y=plot_df["performance(fair loss)"], name="valid fair-mean", line=dict(color="blue")))
     fig.add_trace(go.Scatter(x=plot_df["iterations"], y=plot_df["performance(mae)"], name="valid l1-mean", line=dict(color="purple")),secondary_y=True)
     fig.update_layout(
         title_text='performance', title_x=0.5
     )
     fig.update_xaxes(title_text='iterations')
-    fig.update_yaxes(title_text='mape', secondary_y=False)
+    fig.update_yaxes(title_text='fair loss', secondary_y=False)
     fig.update_yaxes(title_text='mae', secondary_y=True)
 
     start_datetime=mlflow.active_run().data.tags['custom.startDateTime']
-    output_dir_base="data/08_reporting/iteration_performance_mape"
+    output_dir_base="data/08_reporting/iteration_performance_fairloss"
     output_dir=os.path.join(output_dir_base, start_datetime)
     os.makedirs(output_dir, exist_ok=True)
-    fig.write_image(os.path.join(output_dir, "iteration_performance_mape.png"))
+    fig.write_image(os.path.join(output_dir, "iteration_performance_fairloss.png"))

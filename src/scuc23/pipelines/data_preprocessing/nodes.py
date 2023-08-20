@@ -113,6 +113,16 @@ def __preprocess_column_state(data: pd.DataFrame) -> pd.DataFrame:
     return data.drop(columns=['state'])
 
 
+def __preprocess_applying_logalithm(data: pd.DataFrame) -> pd.DataFrame:
+    if 'price' in data:
+        data['price_log']=np.log10(data['price'])
+        data = data.drop(columns=['price'])
+        data = data.rename(columns={'price_log': 'price'})
+    data['odometer_log']=np.log10(data['odometer'])
+    data = data.drop(columns=['odometer'])
+    return data.rename(columns={'odometer_log': 'odometer'})
+
+
 def __apply_preprocessing_rules(data: pd.DataFrame) -> pd.DataFrame:
     tmp_df = __preprocess_column_year(data)
     tmp_df = __preprocess_column_manufacturer(tmp_df)
@@ -121,7 +131,8 @@ def __apply_preprocessing_rules(data: pd.DataFrame) -> pd.DataFrame:
     tmp_df = __preprocess_column_odometer(tmp_df)
     tmp_df = __preprocess_column_drive(tmp_df)
     tmp_df = __preprocess_column_size(tmp_df)
-    return __preprocess_column_state(tmp_df)
+    tmp_df = __preprocess_column_state(tmp_df)
+    return __preprocess_applying_logalithm(tmp_df)
 
 
 def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
