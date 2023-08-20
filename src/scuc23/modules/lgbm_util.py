@@ -101,17 +101,17 @@ def save_lgbm_graph(regressor):
 
 
 def save_lgbm_learning_curve(eval_results: Dict):
-    plot_df = pd.DataFrame({'iterations': [i for i, _ in enumerate(eval_results['valid mape-mean'], start=1)], 'performance(mape)': eval_results['valid mape-mean'], 'performance(mae)': eval_results['valid l1-mean']})
+    plot_df = pd.DataFrame({'iterations': [i for i, _ in enumerate(eval_results['valid mape-mean'], start=1)], 'performance(mape)': eval_results['valid mape-mean'], 'performance(huber)': eval_results['valid huber-mean']})
 
     fig= make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_trace(go.Scatter(x=plot_df["iterations"], y=plot_df["performance(mape)"], name="valid mape-mean", line=dict(color="blue")))
-    fig.add_trace(go.Scatter(x=plot_df["iterations"], y=plot_df["performance(mae)"], name="valid l1-mean", line=dict(color="purple")),secondary_y=True)
+    fig.add_trace(go.Scatter(x=plot_df["iterations"], y=plot_df["performance(huber)"], name="valid huber-mean", line=dict(color="purple")),secondary_y=True)
     fig.update_layout(
         title_text='performance', title_x=0.5
     )
     fig.update_xaxes(title_text='iterations')
     fig.update_yaxes(title_text='mape', secondary_y=False)
-    fig.update_yaxes(title_text='mae', secondary_y=True)
+    fig.update_yaxes(title_text='huber', secondary_y=True)
 
     start_datetime=mlflow.active_run().data.tags['custom.startDateTime']
     output_dir_base="data/08_reporting/iteration_performance_mape"

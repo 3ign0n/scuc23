@@ -10,14 +10,14 @@ model_options:
     hyperparams:
       objective: "mape"
       learning_rate: .01
-      metrics: ['mape', 'mae']
+      metrics: ['mape', 'huber']
       num_leaves: 63
       feature_fraction: 0.8
       bagging_freq: 1
       bagging_fraction: 0.8
       random_state: 42
     num_boost_round: 10000
-    early_stopping_rounds: 100
+    early_stopping_rounds: 200
     verbose_eval: false
     num_folds: 5
     is_stratified: false
