@@ -58,6 +58,13 @@ def __preprocess_column_condition(data: pd.DataFrame) -> pd.DataFrame:
     # newとlike newがあるが、like newに寄せる。
     # newのodometerやyearの値見た感じ、新車ってことはありえないので
     data.loc[data['condition']=='new', 'condition'] = 'like new'
+
+    data['condition'] = data['condition'].str.replace('like new', '4')
+    data['condition'] = data['condition'].str.replace('excellent', '3')
+    data['condition'] = data['condition'].str.replace('good', '2')
+    data['condition'] = data['condition'].str.replace('fair', '1')
+    data['condition'] = data['condition'].str.replace('salvage', '0')
+    data['condition'] = data['condition'].astype(int)
     return data
 
 
@@ -77,9 +84,25 @@ def __preprocess_column_odometer(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
+def __preprocess_column_drive(data: pd.DataFrame) -> pd.DataFrame:
+    # driveと価格には、順序性がありそうなので、dummy encodingではなく、ordinary encodingを行う
+    data['drive'] = data['drive'].str.replace('4wd', '2')
+    data['drive'] = data['drive'].str.replace('rwd', '1')
+    data['drive'] = data['drive'].str.replace('fwd', '0')
+    data['drive'] = data['drive'].astype(int)
+    return data
+
+
 def __preprocess_column_size(data: pd.DataFrame) -> pd.DataFrame:
     data['size'] = data['size'].str.replace('ー', '-')
-    data['size'] = data['size'].str.replace('−', '-')    
+    data['size'] = data['size'].str.replace('−', '-')
+
+    # sizeと価格には、順序性がありそうなので、dummy encodingではなく、ordinary encodingを行う
+    data['size'] = data['size'].str.replace('full-size', '3')
+    data['size'] = data['size'].str.replace('mid-size', '2')
+    data['size'] = data['size'].str.replace('sub-compact', '1')
+    data['size'] = data['size'].str.replace('compact', '0')
+    data['size'] = data['size'].astype(int)
     return data
 
 
@@ -96,6 +119,7 @@ def __apply_preprocessing_rules(data: pd.DataFrame) -> pd.DataFrame:
     tmp_df = __preprocess_column_condition(tmp_df)
     tmp_df = __preprocess_column_cylinders(tmp_df)
     tmp_df = __preprocess_column_odometer(tmp_df)
+    tmp_df = __preprocess_column_drive(tmp_df)
     tmp_df = __preprocess_column_size(tmp_df)
     return __preprocess_column_state(tmp_df)
 
@@ -131,7 +155,7 @@ def preprocess_do_dummy_encoding(data: pd.DataFrame, parameters: Dict) -> pd.Dat
     if opts['y_label'] in data:
         valid_columns.append(opts['y_label'])
     valid_data = data[valid_columns]
-    df_enc = pd.get_dummies(valid_data, drop_first=True, dummy_na=True)
+    df_enc = pd.get_dummies(valid_data, drop_first=False)
 
     # lightgbm.basic.LightGBMError: Do not support special JSON characters in feature name.
     # というエラーが出た。
