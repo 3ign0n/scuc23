@@ -1,6 +1,6 @@
 """
-This is a boilerplate test file for pipeline 'data_science'
-generated using Kedro 0.18.11.
+This is a boilerplate test file for pipeline '04_post_process'
+generated using Kedro 0.18.12.
 Please add your pipeline tests here.
 
 Kedro recommends using `pytest` framework, more info about it can be found

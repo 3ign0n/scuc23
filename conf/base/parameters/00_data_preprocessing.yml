@@ -1,0 +1,23 @@
+# This is a boilerplate parameters config generated for pipeline '00_data_preprocessing'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+00_data_preprocessing:
+  skip_pandas_profiling: true
+  valid_params:
+    features:
+      - region
+      - year
+      - manufacturer
+      - condition
+      - cylinders
+      - fuel
+      - odometer
+      - title_status
+      - transmission
+      - drive
+      - size
+      - type
+      - paint_color
+    y_label: "price"

@@ -1,5 +1,5 @@
 """
-This is a boilerplate pipeline 'data_preprocessing'
+This is a boilerplate pipeline '00_data_preprocessing'
 generated using Kedro 0.18.11
 """
 import mlflow
@@ -12,6 +12,7 @@ import logging
 import random
 import numpy as np
 from sklearn.model_selection import train_test_split
+from scipy.stats import boxcox
 
 def set_random_state(parameters: Dict):
     random_state = parameters['random_state']
@@ -32,7 +33,7 @@ def enable_autologging(parameters: Dict):
     mlflow.set_tag("mlflow.runName", now.isoformat()) 
 
     # あとで今回の実行時間を使ってディレクトリ作成したいので、active_runのtagとして保持しておく
-    mlflow.active_run().data.tags['custom.startDateTime']=now.strftime("%Y-%m-%dT%H.%M.%S.%fZ")
+    mlflow.active_run().data.tags['custom.startDateTime']=now.strftime("%Y-%m-%dT%H.%M.%S.%f")[:-3] + "Z"
     mlflow.autolog()
 
 
@@ -142,7 +143,10 @@ def preprocess_data(data: pd.DataFrame) -> pd.DataFrame:
 
 import mlflow
 from pandas_profiling import ProfileReport
-def save_pandas_profiling(train_data: pd.DataFrame, test_data: pd.DataFrame):
+def save_pandas_profiling(train_data: pd.DataFrame, test_data: pd.DataFrame, parameters: Dict):
+    if parameters["00_data_preprocessing"]["skip_pandas_profiling"]:
+        return
+
     start_datetime=mlflow.active_run().data.tags['custom.startDateTime']
     output_dir_base="data/08_reporting/pandas_profiling"
     output_dir=os.path.join(output_dir_base, start_datetime)
@@ -155,7 +159,7 @@ def save_pandas_profiling(train_data: pd.DataFrame, test_data: pd.DataFrame):
 
 
 def preprocess_do_dummy_encoding(data: pd.DataFrame, parameters: Dict) -> pd.DataFrame:
-    opts = parameters['valid_params']
+    opts = parameters["00_data_preprocessing"]['valid_params']
     valid_columns = opts['features']
     if opts['y_label'] in data:
         valid_columns.append(opts['y_label'])
@@ -170,6 +174,30 @@ def preprocess_do_dummy_encoding(data: pd.DataFrame, parameters: Dict) -> pd.Dat
 
     return df_enc
 
-def split_train_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
+
+def preprocess_split_train_data(data: pd.DataFrame, parameters: Dict) -> Tuple:
     X_train, X_valid = train_test_split(data, test_size=0.2, random_state=parameters['random_state'])
     return X_train, X_valid
+
+def preprocess_split_train_data_for_price_classification(data: pd.DataFrame, parameters: Dict) -> (pd.DataFrame, pd.DataFrame):
+    threshold = 11750
+    data['high-end'] = 0
+    data.loc[data['price']>=threshold, 'high-end'] = 1
+    data=data.drop(columns=['price'])
+
+    X_train, X_valid = train_test_split(data, test_size=0.2, random_state=parameters['random_state'], stratify=data['high-end'])
+    return X_train, X_valid
+
+def preprocess_split_train_data_by_price_threshold(data: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
+    threshold = 11750
+    return data[data['price']<threshold], data[data['price']>=threshold]
+
+def preprocess_split_train_data_with_boxcox(data: pd.DataFrame, parameters: Dict) -> Tuple:
+    # 高価格帯については、分布が正規表現になるようにboxcox変換する
+    boxcox_price, boxcox_lambda = boxcox(data['price'])
+    data['price']=boxcox_price
+
+    X_train, X_valid = train_test_split(data, test_size=0.2, random_state=parameters['random_state'])
+
+    return X_train, X_valid, boxcox_lambda
+
