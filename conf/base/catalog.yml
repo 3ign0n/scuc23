@@ -32,17 +32,17 @@ encoded_train_data:
     type: pickle.PickleDataSet
     filepath: data/02_intermediate/encoded_train_data.pkl
 
-train_data_for_price_classification:
+train_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/03_primary/train_data_for_price_classification.pkl
+    filepath: data/03_primary/train_data.pkl
 
-valid_data_for_price_classification:
+valid_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/03_primary/valid_data_for_price_classification.pkl
+    filepath: data/03_primary/valid_data.pkl
 
 test_data:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
@@ -50,109 +50,18 @@ test_data:
     type: pickle.PickleDataSet
     filepath: data/03_primary/test_data.pkl
 
-train_data_under_threshold:
+regressor:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/02_intermediate/train_data_under_threshold.pkl
-
-train_data_under_threshold_for_price_regresstion:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/03_primary/train_data_under_threshold_for_price_regresstion.pkl
-
-valid_data_under_threshold_for_price_regresstion:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/03_primary/valid_data_under_threshold_for_price_regresstion.pkl
-
-train_data_over_threshold:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/02_intermediate/train_data_over_threshold.pkl
-
-train_data_over_threshold_for_price_regresstion:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/03_primary/train_data_over_threshold_for_price_regresstion.pkl
-
-valid_data_over_threshold_for_price_regresstion:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/03_primary/valid_data_over_threshold_for_price_regresstion.pkl
-
-boxcox_lambda_over_threshold_for_price_regresstion:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/03_primary/boxcox_lambda_over_threshold_for_price_regresstion.pkl
-
-classifier:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/06_models/classifier.pkl
+    filepath: data/06_models/regressor.pickle
     versioned: true
 
-classification_eval_results:
+eval_results:
   type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
   data_set:
     type: pickle.PickleDataSet
-    filepath: data/07_model_output/classification_eval_results.pkl
-    versioned: true
-
-highend_proba:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pandas.CSVDataSet
-    filepath: data/07_model_output/highend_proba.csv
-    versioned: true
-
-regressor_under_threshold:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/06_models/regressor_under_threshold.pkl
-    versioned: true
-
-regression_under_threshold_eval_results:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/07_model_output/regression_under_threshold_eval_results.pkl
-    versioned: true
-
-y_pred_under_threshold:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pandas.CSVDataSet
-    filepath: data/07_model_output/y_pred_under_threshold.csv
-    versioned: true
-
-regressor_over_threshold:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/06_models/regressor_over_threshold.pkl
-    versioned: true
-
-regression_over_threshold_eval_results:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pickle.PickleDataSet
-    filepath: data/07_model_output/regression_over_threshold_eval_results.pkl
-    versioned: true
-
-y_pred_over_threshold:
-  type: kedro_mlflow.io.artifacts.MlflowArtifactDataSet
-  data_set:
-    type: pandas.CSVDataSet
-    filepath: data/07_model_output/y_pred_over_threshold.csv
+    filepath: data/07_model_output/eval_results.pkl
     versioned: true
 
 y_pred:
@@ -162,5 +71,5 @@ y_pred:
     filepath: data/07_model_output/y_pred.csv
     versioned: true
     save_args:
-      index: false
-      header: false
+      index: False
+      header: False

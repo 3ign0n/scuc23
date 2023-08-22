@@ -1,0 +1,32 @@
+# This is a boilerplate parameters config generated for pipeline 'data_science'
+# using Kedro 0.18.11.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/0.18.11/kedro_project_setup/configuration.html#parameters
+model: "lgbm"
+model_options:
+  test_size: 0.3
+  lgbm_params:
+    hyperparams:
+      objective: "mape"
+      learning_rate: .01
+      metrics: ['mape', 'huber']
+      num_leaves: 63
+      feature_fraction: 0.8
+      bagging_freq: 1
+      bagging_fraction: 0.8
+      random_state: 42
+    num_boost_round: 10000
+    early_stopping_rounds: 200
+    verbose_eval: false
+    num_folds: 5
+    is_stratified: false
+    is_shuffle: true
+  xgb_params:
+    hyperparams:
+      objective: "reg:linear"
+      eval_metric: "mape"
+    num_boost_round: 10000
+    early_stopping_rounds: 100
+    verbose_eval: false
+    num_folds: 5

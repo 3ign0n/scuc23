@@ -1,6 +1,6 @@
-# Pipeline 03_regression_for_over_threshold
+# Pipeline data_science
 
-> *Note:* This is a `README.md` boilerplate generated using `Kedro 0.18.12`.
+> *Note:* This is a `README.md` boilerplate generated using `Kedro 0.18.11`.
 
 ## Overview
 

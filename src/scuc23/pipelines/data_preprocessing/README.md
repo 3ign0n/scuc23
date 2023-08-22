@@ -1,6 +1,6 @@
-# Pipeline 01_classify_price
+# Pipeline data_preprocessing
 
-> *Note:* This is a `README.md` boilerplate generated using `Kedro 0.18.12`.
+> *Note:* This is a `README.md` boilerplate generated using `Kedro 0.18.11`.
 
 ## Overview
 

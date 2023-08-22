@@ -1,6 +1,6 @@
 """
-This is a boilerplate test file for pipeline '03_regression_for_over_threshold'
-generated using Kedro 0.18.12.
+This is a boilerplate test file for pipeline 'data_preprocessing'
+generated using Kedro 0.18.11.
 Please add your pipeline tests here.
 
 Kedro recommends using `pytest` framework, more info about it can be found

@@ -1,6 +1,6 @@
 """
-This is a boilerplate pipeline '01_classify_price'
-generated using Kedro 0.18.12
+This is a boilerplate pipeline 'data_science'
+generated using Kedro 0.18.11
 """
 
 from .pipeline import create_pipeline
